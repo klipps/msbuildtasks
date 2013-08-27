@@ -236,11 +236,16 @@ namespace MSBuild.Community.Tasks
                         string name = fileItem.ItemSpec;
                         string directoryPathInArchive;
 
+                        // get working directory for current file item
+                        var fileItemWorkingDir = fileItem.GetMetadata("WorkingDirectory");
+                        if (string.IsNullOrEmpty(fileItemWorkingDir))
+                            fileItemWorkingDir = WorkingDirectory;
+
                         // clean up name
                         if (Flatten)
                             directoryPathInArchive = string.Empty;
-                        else if (!string.IsNullOrEmpty(WorkingDirectory))
-                            directoryPathInArchive = GetPath(name, WorkingDirectory);
+                        else if (!string.IsNullOrEmpty(fileItemWorkingDir))
+                            directoryPathInArchive = GetPath(name, fileItemWorkingDir);
                         else
                             directoryPathInArchive = null;
 
